@@ -1,0 +1,231 @@
+<?php
+
+namespace App\Http\Controllers\API\{version_path}\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\{version_path}\Admin\{ResourceName};
+use App\Http\Resources\{version_path}\Admin\{ResourceShowName};
+use App\Http\ValidatorResponse;
+use App\Models\{ModelName};
+use Illuminate\Http\Request;
+
+// add routes/{version}/admin.php
+// Route::apiResource('{route}',{ControllerName}::class);
+// Route::get('{route}-search/{text}',[\App\Http\Controllers\API\{version_path}\Admin\{ControllerName}::class,'search'])->name('admin.{route}.search');
+class {ControllerName} extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+    private function response(bool $success, string $message, $data, int $code = 200): \Illuminate\Http\JsonResponse
+    {
+        return response()->json(
+            [
+                'success' => $success,
+                'message' => $message,
+                'data' => $data,
+                'code' => $code
+            ]
+        );
+    }
+
+    /**
+     * * * * * *  * * * *  * * * * * * * * *
+     * @OA\Get(
+     *      path="/api/admin/{version}/{route}",
+     *      summary="Get all data of {route} table",
+     *      description="Return all the date",
+     *      operationId="{route}_index",
+     *      tags={"{ModelName}"},
+     *      security={{ "api": {} }},
+     *      @OA\Response(response=200,description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/SuccessAll"),
+     *      ),
+     *      @OA\Response(response=401,description="Unauthenticated"),
+     *  )
+     * * * * * * * * * * * * * * * * * * * *
+     */
+    public function index()
+    {
+        $model = {ModelName}::paginate(10);
+        if (count($model) > 0) {
+            $model = {ResourceName}::collection($model);
+            return $this->responseData(true, "Get all data of {route}", $model);
+        }
+        return $this->responseData(false, "Empty array", [], 200);
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/admin/{version}/{route}",
+     *      security={{"admin":{}}},
+     *      operationId="{route}_store",
+     *      tags={"{ModelName}"},
+     *      summary="Create new {route}",
+     *      description="Info",
+     *      @OA\RequestBody(required=true,description="The desired parameters",
+     *           @OA\MediaType(mediaType="multipart/form-data",
+     *              @OA\Schema(type="object",required={"name"},
+     *                  @OA\Property(property="name", type="string", format="text", example="name"),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200,description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/Success"),
+     *      ),
+     *      @OA\Response(response=401,description="Unauthenticated"),
+     * )
+     */
+    public function store(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $rules = [
+            'name' => 'required|string|max:255'
+        ];
+        $validator = new ValidatorResponse();
+        $validator->check($request, $rules);
+        if ($validator->fails) {
+            return response()->json($validator->response, 200);
+        }
+
+        $model = new {ModelName}();
+        $model->name = $request->name;
+        $model->save();
+        $model = new {ResourceShowName}($model);
+        return $this->responseData(true, 'Successfully added', $model, 201);
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/api/admin/{version}/{route}/{id}",
+     *      security={{"admin":{}}},
+     *      operationId="{route}_show",
+     *      tags={"{ModelName}"},
+     *      summary="View {route} from id",
+     *      description="Info",
+     *      @OA\Parameter(name="id",description="{route} id",required=true,in="path",
+     *          @OA\Schema(type="integer",example="1")
+     *      ),
+     *      @OA\Response(response=200,description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/Success"),
+     *       ),
+     *      @OA\Response(response=401,description="Unauthenticated"),
+     *  )
+     */
+
+    public function show($id): \Illuminate\Http\JsonResponse
+    {
+        $model = {ModelName}::find($id);
+        if ($model) {
+            $model = new {ResourceShowName}($model);
+            return $this->responseData(true, 'Show data', $model, 200);
+        }
+        return $this->responseData(false, '{route} is not found', null, 404);
+    }
+
+    /**
+     * @OA\Put(
+     *      path="/api/admin/{version}/{route}/{id}",
+     *      security={{"admin":{}}},
+     *      operationId="{route}_update",
+     *      tags={"{ModelName}"},
+     *      summary="Update columns of {route}",
+     *      description="The desired parameters",
+     *      @OA\Parameter(name="id",description="{route} id",required=true,in="path",
+     *          @OA\Schema(type="integer",example="1")
+     *      ),
+     *      @OA\Parameter(name="name",description="name column",required=true,in="query",
+     *          @OA\Schema(type="string",example="name updated")
+     *      ),
+     *      @OA\Response(response=200,description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/Success"),
+     *       ),
+     *      @OA\Response(response=401,description="Unauthenticated"),
+     * )
+     */
+    public function update(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        $rules = [
+            'name' => 'required|string|max:255'
+        ];
+        $validator = new ValidatorResponse();
+        $validator->check($request, $rules);
+        if ($validator->fails) {
+            return response()->json($validator->response, 200);
+        }
+
+        $model = {ModelName}::find($id);
+        if ($model) {
+            $model->name = $request->name;
+            $model->update();
+            $model = new {ResourceShowName}($model);
+            return $this->responseData(true, 'Successfully updated', $model, 201);
+        }
+        return $this->responseData(false, '{route} is not found', null, 404);
+    }
+
+    /**
+     * @OA\Delete(
+     *      path="/api/admin/{version}/{route}/{id}",
+     *      security={{"admin":{}}},
+     *      operationId="{route}_delete",
+     *      tags={"{ModelName}"},
+     *      summary="Delete {route}",
+     *      description="Delete a {route}",
+     *      @OA\Parameter(name="id",description="{route} id",required=true,in="path",
+     *          @OA\Schema(type="integer",example="1")
+     *      ),
+     *      @OA\Response(response=200,description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/Success"),
+     *       ),
+     *      @OA\Response(response=401,description="Unauthenticated"),
+     * )
+     */
+    public
+    function destroy($id): \Illuminate\Http\JsonResponse
+    {
+        $model = {ModelName}::find($id);
+        if ($model) {
+            try {
+                $model->delete();
+                return $this->responseData(true, 'Successfully deleted', null, 201);
+            } catch (\Exception $exception) {
+                return $this->responseData(false, $exception->getMessage(), null, 403);
+            }
+        }
+        return $this->responseData(false, '{route} is not found', null, 404);
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/api/admin/{version}/{route}-search/{text}",
+     *      security={{"admin":{}}},
+     *      operationId="{route}_search",
+     *      tags={"{ModelName}"},
+     *      summary="show {ModelName}",
+     *      description="Search data",
+     *      @OA\Parameter(name="text",description="search {route} from text",required=true,in="path",
+     *          @OA\Schema(type="string",example="name")
+     *      ),
+     *      @OA\Response(response=200,description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/Success"),
+     *       ),
+     *      @OA\Response(response=401,description="Unauthenticated"),
+     *  )
+     */
+    public function search($text)
+    {
+        $model = {ModelName}::where(function ($query) use ($text) {
+        $query->where('name', 'like', "%$text%")->
+        orWhere('id', 'like', "%$text%")->
+//            orWhere('created_at', 'like', "%$text%")->
+        orWhere('created_at', 'like', "%$text%");
+    })->paginate(10);
+        if (count($model) > 0) {
+            $model = {ResourceName}::collection($model);
+            return $this->responseData(true, "Search result for: $text", $model);
+        }
+        return $this->responseData(false, "Empty array", [], 200);
+    }
+}

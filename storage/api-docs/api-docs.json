@@ -1,0 +1,402 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "WEB AR ",
+        "description": "Documentation for WEB AR",
+        "contact": {
+            "email": "contact@programmer.uz"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/admin/v1/role": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get all data of role table",
+                "description": "Return all the date",
+                "operationId": "role_index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessAll"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "api": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Create new role",
+                "description": "Info",
+                "operationId": "role_store",
+                "requestBody": {
+                    "description": "The desired parameters",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "name"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "admin": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/v1/role/{id}": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "View role from id",
+                "description": "Info",
+                "operationId": "role_show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "role id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "admin": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Update columns of role",
+                "description": "The desired parameters",
+                "operationId": "role_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "role id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "name column",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "name updated"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "admin": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Delete role",
+                "description": "Delete a role",
+                "operationId": "role_delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "role id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "admin": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/v1/role-search/{text}": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "show Role",
+                "description": "Search data",
+                "operationId": "role_search",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "path",
+                        "description": "search role from text",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "name"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "admin": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Success": {
+                "title": "Success Response",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "name"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date",
+                                "example": "2023-10-10 20:20:20"
+                            }
+                        },
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "code": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "SuccessAll": {
+                "title": "Success Response",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "message data"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "name"
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "example": "2023-10-10 20:20:20"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "code": {
+                        "type": "integer",
+                        "example": "200"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "required": [
+                    "name",
+                    "surname",
+                    "email",
+                    "password",
+                    "is_active"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "surname": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "password"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "admin": {
+                "type": "http",
+                "description": "Login with email and password to get the authentication token",
+                "name": "Token based Based",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            },
+            "user": {
+                "type": "http",
+                "description": "Login with email and password to get the authentication token",
+                "name": "Token based Based",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
