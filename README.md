@@ -1,3 +1,4 @@
+# CRUD generator for Laravel
 ## Installed packages
 
 - [JWT-auth (php-open-source-save)](https://github.com/PHP-Open-Source-Saver/jwt-auth).
